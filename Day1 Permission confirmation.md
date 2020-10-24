@@ -7,9 +7,9 @@
 ```bash
 #!/bin/bash
 
-cd /var/lib/rancher/k3s/agent/images
+# 前面不要cd，因为可能某一级目录没有，都需要返回没有权限的提示
+if test -w /var/lib/rancher/k3s/agent/images
 
-if test -w .
 then
         touch hello
         echo "world" > hello
