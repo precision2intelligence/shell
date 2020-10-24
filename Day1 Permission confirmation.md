@@ -24,7 +24,7 @@ fi
 - `$USER`获取当前用户名。
 
 ## 易错点
-题目的意思应该是对`/var/lib/rancher/k3s/agent/images/`目录有写入权限然后写入**该目录**，故在开始要`cd`进入该目录。
+题目的意思应该是对`/var/lib/rancher/k3s/agent/images/`目录有写入权限然后写入**该目录**，故在开始不要`cd`进入该目录，因为前面的几级目录也可能没有。
 
 ## 参考
 [Shell test 命令用法](https://www.runoob.com/linux/linux-shell-test.html)
