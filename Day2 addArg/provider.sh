@@ -6,7 +6,7 @@ checkip() {
                 c=`echo $1 | awk -F. '{print $3}'`
                 d=`echo $1 | awk -F. '{print $4}'`
                 for n in $a $b $c $d; do
-                        if [ $n -ge 255 ] || [ $n -le 0 ]; then
+                        if [ $n -gt 255 ] || [ $n -lt 0 ]; then
                                 echo "the number of the IP should less than 255 and greate than 0"
 
                                 return 2
@@ -18,24 +18,20 @@ checkip() {
         fi
 }
 
-if [[ $1 = "--help" ]] || [[ $1 = "-h" ]]
-then
+showHelp() {
     echo "*******这里是一个帮助说明*******"
     echo "帮助说明介绍provider的用途和使用方法"
     echo " --help/-h   获取帮助"
     echo " --entrypoint/-e   启动服务"
     echo " with no args    停止服务"
     echo " Have fun! "
-    # exit 0
-fi
+}
 
-
-if [[ $1 = "--entrypoint" ]] || [[ $1 = "-e" ]]
-then
-    if  [ ! -n "$2" ] ;then
+funcEntry() {
+    if  [ ! -n "$1" ] ;then
         read -p  "Please input the ip:" ip
     else 
-        ip=$2 #赋值不能有空格
+        ip=$1 #赋值不能有空格
     fi
 
     rs=1
@@ -53,15 +49,28 @@ then
     echo "Server start"
     exit
 
-fi
+}
 
+
+#dispatch different parameters
 if  [ ! -n "$1" ] ;then
     echo "Server stop"
 fi
 
-if [[ $1 != "--entrypoint" ]] && [[ $1 != "-e" ]] &&
-   [[ $1 != "--help" ]] && [[ $1 != "-h" ]] && [ -n "$1" ];
-then
-    echo "Arguments Error!!!"
-    echo "Please use --help or -h to get help information!"
-fi
+while(( $# > 0 ))
+    do
+        case "$1" in
+          "--help" | "-h" )
+              showHelp
+              shift 1;;
+          "--entrypoint" | "-e" )
+              funcEntry $2
+              ;;
+            * )
+                echo "Invalid parameter: $1"
+                echo -e $(Usage)
+                echo "Please use --help or -h to get help information!"
+                exit 1
+        esac
+    done # end while
+
